@@ -1,0 +1,42 @@
+body{
+    width: fit-content;
+    margin: 0 auto;
+}
+
+#toevoegen{
+    width: fit-content;
+    background-color: hotpink;
+    display: flex;
+    padding: 10px;
+}
+
+#taak{
+    width: 250px;
+}
+
+#taakjes{
+    padding: 10px
+}
+
+.taakje{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.taakje p{
+    width: 300px;
+}
+
+#titel{
+    display: flex;
+    justify-content: center;
+}
+
+#titel button{
+    height: 20px;
+    width: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
