@@ -3,7 +3,8 @@ var tijd = document.getElementById("tijd");
 var taakjes = document.getElementById("taakjes");
 var taakje = document.getElementsByClassName("taakje");
 var titel = document.getElementById("titel");
-var bewerkknopjes = document.getElementsByClassName("bewerkknopjes")
+var bewerkknopjes = document.getElementsByClassName("bewerkknopjes");
+var aan = document.getElementsByClassName("aan")
 var mopjes = [];
 var geweest = [];
 var seconden = 0;
@@ -77,6 +78,7 @@ function playButtons(children) {
 
 function play(play) {
     play.setAttribute("onclick", `pauze()`);
+    play.setAttribute("class", "aan")
     // play.style.backgroundColor = "green"
     // play.innerText = "||"
     pauze(play);
@@ -88,9 +90,9 @@ function play(play) {
 }
 
 function pauzeknoppen(parent, teken, kleur) {
-    for (let i = 0; i < parent.children.length; i++) {
-        parent.children[i].children[1].innerHTML = teken;
-        parent.children[i].children[1].style.backgroundColor = kleur;
+    for (let i = 0; i < parent.length; i++) {
+        parent[i].innerHTML = teken;
+        parent[i].style.backgroundColor = kleur;
     }
 }
 
@@ -98,11 +100,11 @@ function pauze() {
     (pauze_bool === false ? pauze_bool = true : pauze_bool = false)
     var countdownAan = () => {
         if (pauze_bool === false) {
+            pauzeknoppen(aan, "||", "green");
             countdown();
-            pauzeknoppen(taakjes, "||", "green");
         } else {
+            pauzeknoppen(aan, "|>", "");
             clearInterval(zetaan)
-            pauzeknoppen(taakjes, "|>", "");
         }
     }
     var zetaan = setInterval(countdownAan, 1000);
