@@ -3,24 +3,55 @@ var tijd = document.getElementById("tijd");
 var taakjes = document.getElementById("taakjes");
 var taakje = document.getElementsByClassName("taakje");
 var titel = document.getElementById("titel");
+var bewerkknopjes = document.getElementsByClassName("bewerkknopjes")
 var mopjes = [];
 var geweest = [];
 var seconden = 0;
 var pauze_bool = true;
 
 function voegToe() {
-    console.log(taak.value, tijd.value);
+    // console.log(taak.value, tijd.value);
     taakjes.innerHTML = localStorage.getItem("data");
-    taakjes.innerHTML += `<div class="taakje"><p>${taak.value}</p><button onclick="play(this)">|></button><span>${tijd.value}</span><button onclick="wissen(this)">X</button></div>`
+    taakjes.innerHTML += `<div class="taakje"><p>${taak.value}</p><button onclick="play(this)">|></button><span>${tijd.value}:00</span><div class="bewerkknopjes"><button onclick="omhoog(this)"><i class="fas fa-hand-point-up"></i></button><button onclick="wissen(this)">X</button><button onclick="omlaag(this)"><i class="fas fa-hand-point-down"></i></button></div></div>`
     localStorage.setItem("data", taakjes.innerHTML)
-    localStorage.setItem("test", tijd.value);
+    // localStorage.setItem("test", tijd.value);
     taak.value = ""
     tijd.value = ""
 }
 
 function wissen(sluit) {
-    sluit.parentElement.remove();
+    sluit.parentElement.parentElement.remove();
     localStorage.setItem("data", taakjes.innerHTML);
+}
+
+function wisselen(oude, nieuwe) {
+    var temp = oude.children[2].outerHTML;
+    oude.children[2].outerHTML = nieuwe.children[2].outerHTML;
+    nieuwe.children[2].outerHTML = temp;
+    var temp = oude.children[0].outerHTML;
+    oude.children[0].outerHTML = nieuwe.children[0].outerHTML;
+    nieuwe.children[0].outerHTML = temp;
+}
+
+function omhoog(knop) {
+    if (knop.parentElement.parentElement.previousElementSibling === null) {
+        alert("Dit staat al vanboven eh noob")
+    } else {
+        oorspronkelijk = knop.parentElement.parentElement;
+        nieuw = knop.parentElement.parentElement.previousElementSibling;
+        wisselen(oorspronkelijk, nieuw)
+    }
+}
+
+function omlaag(knop) {
+    if (knop.parentElement.parentElement.nextElementSibling === null) {
+        alert("Deze is al vanonder eh paljaske")
+    } else {
+        oorspronkelijk = knop.parentElement.parentElement;
+        nieuw = knop.parentElement.parentElement.nextElementSibling;
+        wisselen(oorspronkelijk, nieuw)
+    }
+
 }
 
 function geefTijd(play) {
@@ -38,11 +69,17 @@ function veranderTijd(getal) {
     return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes + ":" + (seconds <= 9 ? "0" : "") + seconds
 }
 
+function playButtons(children) {
+    for (let i = 0; i < children.length; i++) {
+        children[i].style
+    }
+}
+
 function play(play) {
-    play.setAttribute("onclick", `pauze(this)`);
-    play.style.backgroundColor = "green"
-    play.innerText = "||"
-    pauze();
+    play.setAttribute("onclick", `pauze()`);
+    // play.style.backgroundColor = "green"
+    // play.innerText = "||"
+    pauze(play);
     var getal = geefTijd(play.parentElement.children[2]) - 1;
     play.parentElement.children[2].innerHTML = veranderTijd(getal);
     if (getal < 601) {
@@ -50,17 +87,22 @@ function play(play) {
     }
 }
 
-function pauze(button) {
+function pauzeknoppen(parent, teken, kleur) {
+    for (let i = 0; i < parent.children.length; i++) {
+        parent.children[i].children[1].innerHTML = teken;
+        parent.children[i].children[1].style.backgroundColor = kleur;
+    }
+}
+
+function pauze() {
     (pauze_bool === false ? pauze_bool = true : pauze_bool = false)
     var countdownAan = () => {
         if (pauze_bool === false) {
             countdown();
-            button.innerText = "||"
-            button.style.backgroundColor = "green"
+            pauzeknoppen(taakjes, "||", "green");
         } else {
             clearInterval(zetaan)
-            button.innerText = "|>"
-            button.style.backgroundColor = ""
+            pauzeknoppen(taakjes, "|>", "");
         }
     }
     var zetaan = setInterval(countdownAan, 1000);
@@ -103,11 +145,10 @@ function laatsteMinuten(getal, i) {
 function countdown() {
     for (let i = 0; i < taakje.length; i++) {
         var getal = geefTijd(taakje[i].children[2]);
-        if (taakje[i].children[1].onclick.toString() === 'function onclick(event) {\npauze(this)\n}') {
+        if (taakje[i].children[1].onclick.toString() === 'function onclick(event) {\npauze()\n}') {
             getal--;
             taakje[i].children[2].innerHTML = veranderTijd(getal);
             laatsteMinuten(getal, i);
-            test
         }
     }
     localStorage.setItem("data", taakjes.innerHTML);
@@ -115,6 +156,10 @@ function countdown() {
 
 function bewerk() {
     titel.innerHTML = `<input type="text" placeholder="${localStorage.getItem("Titel_TODO")}" style="height: 50px; font-size: 30px; width: 300px"><button class="pasaan" onclick="gedaan(this)"><i class="fas fa-check"></i></button>`
+    // console.log(bewerkknopjes, bewerkknopjes.length)
+    for (let i = 0; i < bewerkknopjes.length; i++) {
+        bewerkknopjes[i].style.display = "flex"
+    }
 }
 
 function gedaan(bewerkbutton) {
@@ -124,10 +169,17 @@ function gedaan(bewerkbutton) {
     } else {
         if (bewerkbutton !== undefined) {
             console.log("defined")
-            localStorage.setItem("Titel_TODO", bewerkbutton.parentElement.children[0].value)
+            if (bewerkbutton.parentElement.children[0].value !== "") {
+                localStorage.setItem("Titel_TODO", bewerkbutton.parentElement.children[0].value)
+            } else {
+                localStorage.setItem("Titel_TODO", "Sander = God");
+            }
         }
     }
     titel.innerHTML = `<h1>${localStorage.getItem("Titel_TODO")}</h1><button class="bewerk" onclick="bewerk()"><i class="far fa-edit"></i></button>`
+    for (let i = 0; i < bewerkknopjes.length; i++) {
+        bewerkknopjes[i].style.display = "none"
+    }
 }
 
 window.addEventListener("load", () => taakjes.innerHTML = localStorage.getItem("data"), gedaan());

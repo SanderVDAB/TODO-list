@@ -28,6 +28,15 @@ body{
     width: 300px;
 }
 
+.taakje span{
+    margin: 5px;
+}
+
+.taakje .bewerkknopjes{
+    display: none;
+    /* display: flex; */
+}
+
 #titel{
     display: flex;
     justify-content: center;
