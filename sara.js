@@ -11,11 +11,9 @@ var seconden = 0;
 var pauze_bool = true;
 
 function voegToe() {
-    // console.log(taak.value, tijd.value);
     taakjes.innerHTML = localStorage.getItem("data");
     taakjes.innerHTML += `<div class="taakje"><p>${taak.value}</p><button onclick="play(this)">|></button><span>${tijd.value}:00</span><div class="bewerkknopjes"><button onclick="omhoog(this)"><i class="fas fa-hand-point-up"></i></button><button onclick="wissen(this)">X</button><button onclick="omlaag(this)"><i class="fas fa-hand-point-down"></i></button></div></div>`
     localStorage.setItem("data", taakjes.innerHTML)
-    // localStorage.setItem("test", tijd.value);
     taak.value = ""
     tijd.value = ""
 }
@@ -79,8 +77,6 @@ function playButtons(children) {
 function play(play) {
     play.setAttribute("onclick", `pauze()`);
     play.setAttribute("class", "aan")
-    // play.style.backgroundColor = "green"
-    // play.innerText = "||"
     pauze(play);
     var getal = geefTijd(play.parentElement.children[2]) - 1;
     play.parentElement.children[2].innerHTML = veranderTijd(getal);
@@ -158,7 +154,6 @@ function countdown() {
 
 function bewerk() {
     titel.innerHTML = `<input type="text" placeholder="${localStorage.getItem("Titel_TODO")}" style="height: 50px; font-size: 30px; width: 300px"><button class="pasaan" onclick="gedaan(this)"><i class="fas fa-check"></i></button>`
-    // console.log(bewerkknopjes, bewerkknopjes.length)
     for (let i = 0; i < bewerkknopjes.length; i++) {
         bewerkknopjes[i].style.display = "flex"
     }
